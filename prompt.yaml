@@ -1,0 +1,91 @@
+prompt: |
+  Создать bash-скрипт для автоматической установки Bitrix с использованием Docker
+metadata:
+  author: "AI Помощник"
+  version: "1.0"
+  date: "2023-11-20"
+
+requirements:
+  download:
+    source_url: "https://www.1c-bitrix.ru/download/small_business_encode.tar.gz"
+    local_filename: "small_business_encode.tar.gz"
+    integrity_check: "gzip -t"
+
+  extraction:
+    fix_structure:
+      - "перемещение содержимого вложенной папки bitrix"
+      - "create_missing_files: [.access.php, .htaccess, bitrix/.settings.php]"
+    permissions:
+      directories: 755
+      files: 644
+
+  docker_setup:
+    components:
+      nginx:
+        version: "1.23-alpine"
+        ports: ["80:80"]
+        config:
+          - "пользовательский nginx.conf с поддержкой PHP"
+          - "обработка .htaccess"
+      
+      php:
+        image: "bitrixdocker/php-fpm:8.1"
+        config:
+          opcache:
+            enable: 1
+            memory: "256M"
+            max_files: 20000
+          limits:
+            max_execution_time: 600
+            memory_limit: "512M"
+        extensions: ["pdo_pgsql", "gd", "zip"]
+      
+      postgres:
+        version: "15-alpine"
+        credentials:
+          db: "bitrix"
+          user: "bitrix"
+          password: "bitrix_pass"
+        storage: "./postgres_data"
+
+automation:
+  dependencies: ["tar", "docker", "docker-compose", "curl|wget"]
+  cleanup: "при SIGINT и ошибках"
+  features:
+    - "цветной вывод (зеленый/красный/желтый)"
+    - "автоперезапуск контейнеров"
+    - "защита от частичных загрузок"
+    - "поддержка кириллицы в консоли"
+  
+  flow:
+    - "проверка зависимостей"
+    - "проверка существующей установки"
+    - "загрузка и проверка архива"
+    - "распаковка и исправление структуры"
+    - "генерация docker-конфигов"
+    - "сборка и запуск контейнеров"
+    - "пост-установочные инструкции"
+
+post_installation:
+  output:
+    access:
+      - "URL: http://localhost"
+      - "Админка: http://localhost/bitrix/admin"
+    database:
+      - "Тип: PostgreSQL"
+      - "Хост: postgres"
+      - "Данные: bitrix/bitrix_pass"
+    management:
+      - "Старт: docker-compose start"
+      - "Стоп: docker-compose stop"
+      - "Пересборка: docker-compose up --build"
+
+additional:
+  error_handling:
+    - "очистка временных файлов при выходе"
+    - "логирование ошибок в stderr"
+  compatibility:
+    - "поддержка curl и wget"
+  security:
+    - "проверка прав доступа"
+    - "санитизация пользовательского ввода"
