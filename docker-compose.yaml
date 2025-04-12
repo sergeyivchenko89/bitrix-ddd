@@ -14,6 +14,18 @@ services:
       timeout: 5s
       retries: 5
 
+  fpm:
+    image: php:8.2-fpm
+    container_name: bitrix_demo_fpm
+    networks:
+      - bitrix_demo_network
+    depends_on:
+      - db
+    volumes:
+      - ./infrastructure/usr/local/etc/php-fpm.conf:/usr/local/etc/php-fpm.conf
+      - ./infrastructure/usr/local/etc/php/php.ini:/usr/local/etc/php/php.ini
+      - ./infrastructure/usr/local/etc/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf
+      
 networks:
   bitrix_demo_network:
     external: true
