@@ -1,0 +1,19 @@
+services:
+  db:
+    image: postgres:latest
+    container_name: bitrix_demo_db
+    env_file:
+      - ./env
+    volumes:
+      - ./db_data:/var/lib/mysql
+    networks:
+      - bitrix_demo_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+networks:
+  bitrix_demo_network:
+    external: true
