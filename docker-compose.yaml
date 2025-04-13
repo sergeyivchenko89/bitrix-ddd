@@ -25,6 +25,21 @@ services:
       - ./infrastructure/usr/local/etc/php-fpm.conf:/usr/local/etc/php-fpm.conf
       - ./infrastructure/usr/local/etc/php/php.ini:/usr/local/etc/php/php.ini
       - ./infrastructure/usr/local/etc/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf
+    healthcheck:
+      test: ["CMD-SHELL", "php -v"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  nginx:
+    image: nginx:latest
+    container_name: bitrix_demo_nginx
+    networks:
+      - bitrix_demo_network
+    depends_on:
+      - fpm
+    volumes:
+      - ./infrastructure/etc/nginx/nginx.conf:/etc/nginx/nginx.conf
       
 networks:
   bitrix_demo_network:
