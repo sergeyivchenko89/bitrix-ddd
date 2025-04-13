@@ -15,3 +15,11 @@ bitrix/modules/
 bitrix/php_interface/dbconn.php
 bitrix/images
 bitrix/legal
+upload/
+
+# Ignore all .log files
+*.log
+
+# Ignore all .env files
+*.env
+
