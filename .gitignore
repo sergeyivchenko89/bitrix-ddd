@@ -1,0 +1,17 @@
+# Ignore .DS_Store files on all levels
+.DS_Store
+**/.DS_Store
+
+# Ignore Bitrix directories that should not be stored in the repository
+bitrix/cache/
+bitrix/backup/
+bitrix/tmp/
+bitrix/logs/
+bitrix/updates/
+bitrix/html_pages/
+bitrix/managed_cache/
+bitrix/stack_cache/
+bitrix/modules/
+bitrix/php_interface/dbconn.php
+bitrix/images
+bitrix/legal
