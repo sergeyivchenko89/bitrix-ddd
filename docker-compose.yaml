@@ -27,7 +27,7 @@ services:
       - ./infrastructure/usr/local/etc/php-fpm.conf:/usr/local/etc/php-fpm.conf
       - ./infrastructure/usr/local/etc/php/php.ini:/usr/local/etc/php/php.ini
       - ./infrastructure/usr/local/etc/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf
-      - ./infrastructure/var/log/php-fpm:/var/log/php-fpm
+      - ./infrastructure/var/log:/var/log
       - ./bitrix:/var/www/bitrix/bitrix
       - ./upload:/var/www/bitrix/upload
       - ./local:/var/www/bitrix/local
